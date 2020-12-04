@@ -22,10 +22,6 @@ class Stack {
         return this.#stack.length;
     }
 
-    log(){
-        console.log(this.#stack);
-    }
-
 }
 
 module.exports = Stack;

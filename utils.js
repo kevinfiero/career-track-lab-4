@@ -6,26 +6,30 @@ const logic = function(arrayOfBrackets) {
     const len = arrayOfBrackets.length;
 
     for (let i = 0; i<len; i++){
-        stack.log();
         if(checkIfLeftBracket(arrayOfBrackets[i])){
             stack.push(arrayOfBrackets[i]);
         } else {
             const correspondingBracket = getCorrespondingBracket(arrayOfBrackets[i]);
             const bracketOnTopStack = stack.peek();
-            if(correspondingBracket === bracketOnTopStack){
-                stack.pop();
-            } else {
-                stack.push(arrayOfBrackets[i]);
+            stack.pop();
+            if(bracketOnTopStack === undefined){
+                return {"error": `missing ${correspondingBracket}`};
+            }
+            if(bracketOnTopStack !== correspondingBracket){
+                return {"error": `missing ${getCorrespondingBracket(bracketOnTopStack)}`};
             }
         }
             
     }
 
-    if(stack.length() === 0){
-        return {"success": true};
-    } else {
-        return {"error": "missing"};
-    }
+        if(stack.length() === 0){
+            return {"success": true};
+        } else {
+            bracketOnTopStack = stack.peek()
+            return {"error": `missing ${getCorrespondingBracket(bracketOnTopStack)}`};
+        }
+        
+
 
 }
 
@@ -51,10 +55,16 @@ const getCorrespondingBracket = function(element) {
     const leftCharacters = ['{','[','('];
     const rightCharacters = ['}',']',')'];
 
-    const indexOfRightBracketInArray = rightCharacters.indexOf(element);
-    const correspondingLeftBracket = leftCharacters[indexOfRightBracketInArray];
+    if(checkIfLeftBracket(element)){
+        const indexOfLeftBracketInArray = leftCharacters.indexOf(element);
+        return rightCharacters[indexOfLeftBracketInArray];
 
-    return correspondingLeftBracket;
+    } else {
+        const indexOfRightBracketInArray = rightCharacters.indexOf(element);
+        return leftCharacters[indexOfRightBracketInArray];
+    }
+
+
 
 }
 
